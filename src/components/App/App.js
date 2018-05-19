@@ -73,15 +73,15 @@ class App extends Component {
 
   addTrack(track){
 
-     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)){
+     if (this.state.playListTracks.find(savedTrack => savedTrack.id === track.id)){
 
        return;
 
      } else {
 
-       let tracks = this.state.playlistTracks.concat(track); //rather than use push, use concat to merge track with playlistTracks and create a new array.
+       let tracks = this.state.playListTracks.concat(track); //rather than use push, use concat to merge track with playlistTracks and create a new array.
 
-       this.setState({playlistTracks: tracks});
+       this.setState({playListTracks: tracks});
 
      }
 
@@ -105,11 +105,11 @@ class App extends Component {
     // console.log('trackURIs: ' + trackURIs);
     //
     // Spotify.savePlaylist().then();
-    const trackURIs = this.state.playlistTracks.map(track => track.uri);
-          Spotify.savePlayList(this.state.playlistName, trackURIs).then(() => {
+    const trackURIs = this.state.playListTracks.map(track => track.uri);
+          Spotify.savePlayList(this.state.playListName, trackURIs).then(() => {
             this.setState({
-              playlistName: 'New Playlist',
-              playlistTracks: []
+              playListName: 'New Playlist',
+              playListTracks: []
             });
     })
   }

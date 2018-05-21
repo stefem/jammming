@@ -1,13 +1,13 @@
 let accessToken = '';
-let expires_in = '';
-const clientID = '';
+const clientID = 'e2fb90f108634dd2b2764c37044fb356';
 const redirectURI = 'http://localhost:3000';
+const expires_in = '';
 
 const Spotify = {
   getAccessToken() {
           // Check if access token and expiry time are present in the url
           const wlh = window.location.href;
-          const regexHasToken = RegExp(/#access_token=([^&]*)/);
+          const regexHasToken = RegExp(/access_token=([^&]*)/);
           const regexTokenExpiry = RegExp(/expires_in=([^&]*)/);
           let urlHasToken = regexHasToken.test(wlh);
           let urlTokenExpiry = regexTokenExpiry.test(wlh);
@@ -20,7 +20,7 @@ const Spotify = {
           } else if (urlTokenExpiry && urlHasToken) {
 
                   // if access token and expiry time have just been added
-                  accessToken = window.location.href.match(/#access_token=([^&]*)/)[1]; // gives accessToken a value
+                  accessToken = window.location.href.match(/access_token=([^&]*)/)[1]; // gives accessToken a value
                   const expiryTime = window.location.href.match(/expires_in=([^&]*)/)[1]; // gives expiryTime a value
                   window.setTimeout(() => accessToken = '', expires_in * 1000); // zaps accessToken when time runs out
                   window.history.pushState('Access Token', null, '/'); // Clears parameters in URL
@@ -34,12 +34,13 @@ const Spotify = {
           }
   },
   search(term) {
-    console.log('Spotify.search - in the method');
-          if(!accessToken) {
-                  this.getAccessToken()
-                  console.log('Spotify.search - getting access token');
-          }
-            console.log('Spotify.search - fetching');
+    // console.log('Spotify.search - in the method');
+    //       if(!accessToken) {
+    //               this.getAccessToken()
+    //               console.log('Spotify.search - getting access token');
+    //       }
+    //         console.log('Spotify.search - fetching');
+    const accessToken = Spotify.getAccessToken();
                   return fetch(
                           `https://api.spotify.com/v1/search?type=track&q=${term}`,
                           {
@@ -47,13 +48,13 @@ const Spotify = {
                           }
 
                   ).then( response => {
-                          // console.log('response.json: ' + response.json());
                           return response.json();
 
                   }).then( jsonResponse => {
 
                           if(jsonResponse.tracks.items) {
-                            console.log('returning jsonResponse.tracks.items: ' + jsonResponse.tracks.items);
+                            console.log('WITHIN JSPONRESPONSE: ' + jsonResponse.tracks.items);
+                            // console.log();
                             return jsonResponse.tracks.items.map( track => (
                               {
                                 id: track.id,
@@ -64,10 +65,10 @@ const Spotify = {
                             }));
                           } else {
                             console.log('No valid response received from server.');
-                            return;
+                            return [];
                           }
 
-                  }).then(tracks => console.log(tracks));
+                  });
 
   },
   savePlayList(playListName, trackURIs) {

@@ -115,14 +115,14 @@ class App extends Component {
   }
 
    search(term){
-
+      console.log('SPOTIFY SEARCH: ' + Spotify.search(term)); // shows 'SPOTIFY SEARCH: [object Promise]'
       Spotify.search(term).then(tracks => {
-
+        console.log("tracks in App.js: " + tracks); // returns 'undefined'
         this.setState({searchResults: tracks});
 
       });
-
     }
+
 
   render() {
     console.log('App.js - this.state.searchResults: ' + this.state.searchResults)
